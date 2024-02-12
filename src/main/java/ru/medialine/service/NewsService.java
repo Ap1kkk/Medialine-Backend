@@ -30,18 +30,18 @@ public class NewsService {
 
     @SneakyThrows
     public News updateNews(News news) {
-        findById(news.getId());
+        getById(news.getId());
         return newsRepository.save(news);
     }
 
     @SneakyThrows
     public void deleteNews(Long id) {
-        findById(id);
+        getById(id);
         newsRepository.deleteById(id);
     }
 
     @SneakyThrows
-    public News findById(Long id) {
+    public News getById(Long id) {
         return newsRepository.findById(id)
                 .orElseThrow(() -> new Exception("Unable to find news by id " + id));
     }

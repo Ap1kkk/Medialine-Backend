@@ -28,4 +28,4 @@ CREATE TABLE medialine_products (
 );
 
 INSERT INTO medialine_users(email, password, role, status)
-        VALUES ('admin@mail.ru', '$2a$12$fe2rFInXHmBSLS0i5VVv0OGgG8xl6whjcbUHtAOyfFOK7aGI3ix6W', 'ADMIN', 'ACTIVE');
+        VALUES ('admin@mail.ru', '$2a$12$gChF6b54pJMIwy6iFcI21OXrxToEgifHuO5OMkT785YJ3SqUYQT22', 'ADMIN', 'ACTIVE');

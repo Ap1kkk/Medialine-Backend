@@ -27,7 +27,7 @@ public class CommonConfig {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .setDateFormat(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US));
+                .setDateFormat(new SimpleDateFormat("yyyy-MM-dd", Locale.US));
     }
 
 }
