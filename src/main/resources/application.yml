@@ -1,0 +1,31 @@
+
+spring:
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://${spring.datasource.database.host}:${spring.datasource.database.port}/${spring.datasource.database.name}
+        password: postgres
+        username: postgres
+        database:
+            host: localhost
+            port: 5432
+            name: medialine
+    jpa:
+        show-sql: false
+        hibernate:
+            ddl-auto: update
+    #whiteip: http://localhost:4200
+    whiteip: '*'
+    port: 8080
+
+jwt:
+    header: Authorization
+    secret: secretmedialine123123123123123123123
+    expiration: 86400
+
+logging:
+    level:
+        root: INFO
+        ru.medialine: DEBUG
+
+server:
+    port: 8080

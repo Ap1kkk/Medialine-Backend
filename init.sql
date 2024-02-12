@@ -1,0 +1,31 @@
+CREATE TABLE medialine_news (
+    id                  BIGSERIAL,
+    title               VARCHAR(255) NOT NULL,
+    time                timestamp,
+    text                VARCHAR(255) NOT NULL,
+    image_path          VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE medialine_users (
+    id              BIGSERIAL,
+    email           VARCHAR(255) NOT NULL,
+    password        VARCHAR(255) NOT NULL,
+    role            VARCHAR(255) NOT NULL,
+    status          VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE medialine_products (
+     id              BIGSERIAL,
+     title           VARCHAR(255) NOT NULL,
+     category        VARCHAR(255) NOT NULL,
+     description     VARCHAR(255) NOT NULL,
+     specials        VARCHAR(255)[],
+     packaging       VARCHAR(255)[],
+     image_path      VARCHAR(255) NOT NULL,
+     PRIMARY KEY (id)
+);
+
+INSERT INTO medialine_users(email, password, role, status)
+        VALUES ('admin@mail.ru', '$2a$12$fe2rFInXHmBSLS0i5VVv0OGgG8xl6whjcbUHtAOyfFOK7aGI3ix6W', 'ADMIN', 'ACTIVE');
