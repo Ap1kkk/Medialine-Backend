@@ -19,56 +19,15 @@ public class NewsController {
 
     private final NewsService newsService;
 
-    @GetMapping("/all")
+    @GetMapping()
     public List<News> getAllNews() {
-        try {
-            log.debug("Get all news");
-            return newsService.getAllNews();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return null;
-        }
+        log.debug("Get all news");
+        return newsService.getAllNews();
     }
 
     @GetMapping("/{id}")
     public News getNewsById(@PathVariable Long id) {
-        try {
-            log.debug("Get news by id: {}", id);
-            return newsService.getById(id);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return null;
-        }
-    }
-
-    @PostMapping(value = "/add")
-    public News addNews(@RequestBody News news) {
-        try {
-            log.debug("Add news: {}", news.toString());
-            return newsService.addNews(news);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return null;
-        }
-    }
-    @PatchMapping("/update")
-    public ResponseEntity<?> updateNews(@RequestBody News news) {
-        try {
-            log.debug("Update news: {}", news.toString());
-            return new ResponseEntity<>(newsService.updateNews(news), HttpStatus.OK);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
-        }
-    }
-
-    @DeleteMapping("/delete")
-    public void deleteNews(@RequestParam Long id) {
-        try {
-            log.debug("Delete news with id: {}", id);
-            newsService.deleteNews(id);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
+        log.debug("Get news by id: {}", id);
+        return newsService.getById(id);
     }
 }

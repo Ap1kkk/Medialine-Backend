@@ -1,6 +1,7 @@
 package ru.medialine.service;
 
 import lombok.SneakyThrows;
+import ru.medialine.exception.DatabaseException;
 import ru.medialine.model.News;
 import ru.medialine.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,16 @@ public class NewsService {
     }
 
     @SneakyThrows
+    public News getById(Long id) {
+        return newsRepository.findById(id)
+                .orElseThrow(() -> new DatabaseException("Unable to find news by id " + id));
+    }
+
+    @SneakyThrows
     public News addNews(News news) {
         if(news.getId() != null) {
             if(newsRepository.findById(news.getId()).isPresent())
-                throw new Exception("News with id " + news.getId() + " already exists");
+                throw new DatabaseException("News with id " + news.getId() + " already exists");
         }
         return newsRepository.save(news);
     }
@@ -40,9 +47,4 @@ public class NewsService {
         newsRepository.deleteById(id);
     }
 
-    @SneakyThrows
-    public News getById(Long id) {
-        return newsRepository.findById(id)
-                .orElseThrow(() -> new Exception("Unable to find news by id " + id));
-    }
 }

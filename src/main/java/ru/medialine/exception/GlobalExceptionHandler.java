@@ -10,8 +10,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler
-    public ResponseEntity<AppException> catchResourceNotFoundException(Exception e) {
+    public ResponseEntity<AppException> catchException(Exception e) {
         log.error(e.getMessage());
-        return new ResponseEntity<>(new AppException(HttpStatus.NOT_FOUND, e.getMessage()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new AppException(HttpStatus.FORBIDDEN, e.getMessage()), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<AppException> catchJwtAuthenticationException(JwtAuthenticationException e) {
+        log.error(e.getMessage());
+        return new ResponseEntity<>(new AppException(HttpStatus.UNAUTHORIZED, e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 }

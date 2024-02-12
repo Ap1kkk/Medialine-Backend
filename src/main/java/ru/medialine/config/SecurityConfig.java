@@ -19,11 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 import ru.medialine.security.JwtAuthenticationFilter;
 import ru.medialine.service.UserService;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -32,19 +30,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    //TODO fix path
     private static final List<String> AUTH_WHITELIST = List.of(
-            "/static/**",
-            "/swagger-ui.html",
-            "/swagger-ui/**",
-            "/api/admin/login",
-            "/api/news/all",
-            "/api/products/all"
+        "/api/admin/login"
+    );
+    private static final List<String> AUTH_ONLY = List.of(
+        "/api/admin/**"
     );
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserService userService;
-//    private final JwtAuthenticationConfigurer jwtConfigurer;
 
     @Bean
     protected PasswordEncoder passwordEncoder() {
@@ -52,22 +46,22 @@ public class SecurityConfig {
     }
 
     @Bean
-    @SuppressWarnings("deprecated")
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> {
-                    cors.configurationSource(corsConfigurationSource());
-                })
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((request) -> request
-                        .requestMatchers(AUTH_WHITELIST.toArray(new String[0]))
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
-//                .apply(jwtConfigurer);
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .cors(cors -> {
+                cors.configurationSource(corsConfigurationSource());
+            })
+            .csrf(AbstractHttpConfigurer::disable)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests((request) -> request
+                    .requestMatchers(AUTH_WHITELIST.toArray(new String[0]))
+                    .permitAll()
+                    .requestMatchers(AUTH_ONLY.toArray(new String[0]))
+                    .authenticated()
+                    .anyRequest()
+                    .permitAll())
+            .authenticationProvider(authenticationProvider())
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

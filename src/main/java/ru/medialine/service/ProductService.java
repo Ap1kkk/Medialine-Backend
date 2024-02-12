@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.medialine.exception.DatabaseException;
 import ru.medialine.model.Product;
 import ru.medialine.repository.ProductRepository;
 
@@ -20,26 +21,29 @@ public class ProductService {
     }
 
     @SneakyThrows
+    public Product getById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new DatabaseException("Unable to find product by id " + id));
+    }
+
+    @SneakyThrows
     public Product addProduct(Product product) {
         if(product.getId() != null) {
             if(productRepository.findById(product.getId()).isPresent())
-                throw new Exception("Product with id " + product.getId() + " already exists");
+                throw new DatabaseException("Product with id " + product.getId() + " already exists");
         }
         return productRepository.save(product);
     }
     @SneakyThrows
     public Product updateProduct(Product product) {
-        findById(product.getId());
+        getById(product.getId());
         return productRepository.save(product);
-    }
-    public void deleteProduct(Long id) {
-        findById(id);
-        productRepository.deleteById(id);
     }
 
     @SneakyThrows
-    public Product findById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new Exception("Unable to find product by id " + id));
+    public void deleteProduct(Long id) {
+        getById(id);
+        productRepository.deleteById(id);
     }
+
 }
