@@ -1,4 +1,3 @@
-
 spring:
     datasource:
         driver-class-name: org.postgresql.Driver
@@ -16,6 +15,23 @@ spring:
     #whiteip: http://localhost:4200
     whiteip: '*'
     port: 8080
+    dateFormat: "yyyy-MM-dd"
+
+
+
+security:
+    whitelist:
+        - "/api/admin/login"
+    authOnly:
+        - "/api/admin/**"
+
+cors:
+    allowedOrigin: "http://localhost:4200"
+    allowedHeader: "*"
+    allowedMethod: "*"
+    configurationPattern: "/**"
+
+
 
 jwt:
     header: Authorization

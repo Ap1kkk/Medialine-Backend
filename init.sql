@@ -20,9 +20,9 @@ CREATE TABLE medialine_products (
      id              BIGSERIAL,
      title           VARCHAR(255) NOT NULL,
      category        VARCHAR(255) NOT NULL,
-     description     VARCHAR(255) NOT NULL,
-     specials        VARCHAR(255)[],
-     packaging       VARCHAR(255)[],
+     description     TEXT NOT NULL,
+     specials        TEXT[],
+     packaging       TEXT[],
      image_path      VARCHAR(255) NOT NULL,
      PRIMARY KEY (id)
 );

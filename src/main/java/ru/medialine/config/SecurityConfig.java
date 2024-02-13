@@ -1,6 +1,7 @@
 package ru.medialine.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,10 +21,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import ru.medialine.config.properties.CorsConfigProperties;
+import ru.medialine.config.properties.SecurityConfigProperties;
+import ru.medialine.exception.RestResponseStatusExceptionResolver;
 import ru.medialine.security.JwtAuthenticationFilter;
 import ru.medialine.service.UserService;
-
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -30,12 +33,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private static final List<String> AUTH_WHITELIST = List.of(
-        "/api/admin/login"
-    );
-    private static final List<String> AUTH_ONLY = List.of(
-        "/api/admin/**"
-    );
+    private final SecurityConfigProperties securityProperties;
+    private final CorsConfigProperties corsProperties;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserService userService;
@@ -54,9 +53,9 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests((request) -> request
-                    .requestMatchers(AUTH_WHITELIST.toArray(new String[0]))
+                    .requestMatchers(securityProperties.getWhitelist())
                     .permitAll()
-                    .requestMatchers(AUTH_ONLY.toArray(new String[0]))
+                    .requestMatchers(securityProperties.getAuthOnly())
                     .authenticated()
                     .anyRequest()
                     .permitAll())
@@ -68,14 +67,19 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:4200"); // Add your frontend origin
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
+        configuration.addAllowedOrigin(corsProperties.getAllowedOrigin());
+        configuration.addAllowedHeader(corsProperties.getAllowedHeader());
+        configuration.addAllowedMethod(corsProperties.getAllowedMethod());
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration(corsProperties.getConfigurationPattern(), configuration);
 
         return source;
+    }
+
+    @Bean
+    public HandlerExceptionResolver customExceptionResolver() {
+        return new RestResponseStatusExceptionResolver();
     }
 
     @Bean

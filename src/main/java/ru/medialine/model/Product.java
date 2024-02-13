@@ -1,8 +1,10 @@
 package ru.medialine.model;
 
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import java.lang.reflect.Array;
 import java.util.List;
@@ -26,15 +28,13 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
-    @ElementCollection
-    @Column(name = "specials", length = 255)
-    @CollectionTable(name = "medialine_products_specials", joinColumns = @JoinColumn(name = "product_id"))
-    private List<String> specials;
+    @Type(StringArrayType.class)
+    @Column(name = "specials", columnDefinition = "TEXT[]")
+    private String[] specials;
 
-    @ElementCollection
-    @Column(name = "packaging", length = 255)
-    @CollectionTable(name = "medialine_products_packaging", joinColumns = @JoinColumn(name = "product_id"))
-    private List<String> packaging;
+    @Type(StringArrayType.class)
+    @Column(name = "packaging", columnDefinition = "TEXT[]")
+    private String[] packaging;
 
     @Column(name = "image_path",nullable = false)
     private String imagePath;

@@ -18,6 +18,10 @@ import java.util.Locale;
 @Getter
 @Configuration
 public class CommonConfig {
+
+    @Value("${spring.dateFormat}")
+    private String dateFormat;
+
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper()
@@ -27,7 +31,7 @@ public class CommonConfig {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .setDateFormat(new SimpleDateFormat("yyyy-MM-dd", Locale.US));
+                .setDateFormat(new SimpleDateFormat(dateFormat, Locale.US));
     }
 
 }
