@@ -1,6 +1,8 @@
 package ru.medialine.security;
 
 import io.jsonwebtoken.*;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import ru.medialine.exception.JwtAuthenticationException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtAuthenticationProvider {
 
@@ -65,6 +68,7 @@ public class JwtAuthenticationProvider {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
+
 
     public String getUsername(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
