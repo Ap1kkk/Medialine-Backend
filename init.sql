@@ -2,7 +2,7 @@ CREATE TABLE medialine_news (
     id                  BIGSERIAL,
     title               VARCHAR(255) NOT NULL,
     time                timestamp,
-    text                VARCHAR(255) NOT NULL,
+    text                TEXT NOT NULL,
     image_path          VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
