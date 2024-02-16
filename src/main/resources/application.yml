@@ -12,7 +12,6 @@ spring:
         show-sql: false
         hibernate:
             ddl-auto: update
-    #whiteip: http://localhost:4200
     whiteip: '*'
     port: 8080
     dateFormat: "yyyy-MM-dd"
@@ -45,3 +44,28 @@ logging:
 
 server:
     port: 8080
+
+feedback:
+    from: "test@test.com"
+    subject: "Заявка формы обратной связи"
+    to: "test@test.com"
+    textPattern: "Новое сообщение обратной связи:
+
+Имя клиента: [clientName]
+Телефон клиента: [clientPhone]
+
+Сообщение:
+[Текст сообщения]
+
+С уважением, 
+Site NN"
+
+email:
+    host: "smtp.gmail.com"
+    port: 587
+    username:
+    password:
+    transport-protocol:
+    smtp-auth: true
+    starttls-enable: true
+    debug: true

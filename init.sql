@@ -23,7 +23,7 @@ CREATE TABLE medialine_products (
      description     TEXT NOT NULL,
      specials        TEXT[],
      packaging       TEXT[],
-     image_path      VARCHAR(255) NOT NULL,
+     image_path      VARCHAR(255),
      PRIMARY KEY (id)
 );
 
