@@ -20,6 +20,7 @@ public class AdminController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody LoginDto request) {
+        log.debug("Try to log in by: {}", request.getEmail());
         return authService.authenticate(request);
     }
 

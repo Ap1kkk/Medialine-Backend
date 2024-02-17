@@ -19,7 +19,7 @@ public class EmailServiceImplementation {
     private String subject;
     @Value("${feedback.textPattern}")
     private String messagePattern;
-
+    @Value("${feedback.to}")
     private String to;
     private final JavaMailSender emailSender;
 

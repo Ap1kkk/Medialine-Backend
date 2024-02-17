@@ -21,6 +21,7 @@ spring:
 security:
     whitelist:
         - "/api/admin/login"
+        - "/api/feedback"
     authOnly:
         - "/api/admin/**"
 
@@ -46,26 +47,17 @@ server:
     port: 8080
 
 feedback:
-    from: "test@test.com"
+    from: "ap1kdungeonmaster2@gmail.com"
     subject: "Заявка формы обратной связи"
-    to: "test@test.com"
-    textPattern: "Новое сообщение обратной связи:
-
-Имя клиента: [clientName]
-Телефон клиента: [clientPhone]
-
-Сообщение:
-[Текст сообщения]
-
-С уважением, 
-Site NN"
+    to: "ApikMaster2@yandex.ru"
+    textPattern: "Новое сообщение обратной связи:\n\nИмя клиента: [clientName]\nТелефон клиента: [clientPhone]"
 
 email:
     host: "smtp.gmail.com"
     port: 587
-    username:
-    password:
-    transport-protocol:
+    username: "ap1kdungeonmaster2@gmail.com"
+    password: "qrry cwhy gxdi rsao"
+    transport-protocol: "smtp"
     smtp-auth: true
     starttls-enable: true
     debug: true
