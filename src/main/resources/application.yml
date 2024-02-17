@@ -47,10 +47,14 @@ server:
     port: 8080
 
 feedback:
-    from: "ap1kdungeonmaster2@gmail.com"
+    sender: "ap1kdungeonmaster2@gmail.com"
     subject: "Заявка формы обратной связи"
-    to: "ApikMaster2@yandex.ru"
-    textPattern: "Новое сообщение обратной связи:\n\nИмя клиента: [clientName]\nТелефон клиента: [clientPhone]"
+    receiver: "ApikMaster2@yandex.ru"
+    templateParams:
+      clientName: "clientName"
+      clientPhone: "clientPhone"
+    email-template-location: "emailTemplate.html"
+    languages: "ru-RU"
 
 email:
     host: "smtp.gmail.com"

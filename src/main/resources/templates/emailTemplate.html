@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новое сообщение обратной связи</title>
+    <style>
+        body {
+            font-family: "Arimo", sans-serif;
+            background: #F4F8FF;
+            color: #000A1D;
+            margin: 0;
+        }
+        header {
+            display: flex;
+            align-items: center;
+        }
+        .content {
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2E3A47;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #334E68;
+            margin-bottom: 5px;
+        }
+
+        .client-info {
+            display: flex;
+        }
+        h3.client-info-key {
+            font-weight: bold;
+            color: #1F2D3D;
+        }
+        h3.client-info-value {
+            margin-left: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <header>
+        <h1>Новое сообщение обратной связи</h1>
+    </header>
+
+    <div class="client-info">
+        <h3 class="client-info-key">Имя клиента:</h3>
+        <h3 class="client-info-value" th:text="${clientName}"></h3>
+    </div>
+
+    <div class="client-info">
+        <h3 class="client-info-key">Телефон:</h3>
+        <h3 class="client-info-value" th:text="${clientPhone}"></h3>
+    </div>
+</div>
+</body>
+</html>
