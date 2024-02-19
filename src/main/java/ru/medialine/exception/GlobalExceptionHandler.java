@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.nio.file.NoSuchFileException;
+
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -30,6 +32,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<AppException> catchDatabaseException(DatabaseException e) {
         return buildAppException(e, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<AppException> catchNoSuchFileException(NoSuchFileException e) {
+        return buildAppException("No such file: " + e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler
     public ResponseEntity<AppException> catchResourceException(NoResourceFoundException e) {
         return buildAppException(e, HttpStatus.NOT_FOUND);

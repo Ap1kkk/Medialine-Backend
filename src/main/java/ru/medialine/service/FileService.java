@@ -21,7 +21,7 @@ public class FileService {
 
     @SneakyThrows
     public String upload(MultipartFile file, String oldPath) {
-        if(!oldPath.isEmpty()) {
+        if(!oldPath.isBlank()) {
             delete(oldPath);
         }
         return upload(file);
