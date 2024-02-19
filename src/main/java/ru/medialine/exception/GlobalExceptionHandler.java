@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @ControllerAdvice
@@ -27,6 +28,10 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler
     public ResponseEntity<AppException> catchDatabaseException(DatabaseException e) {
+        return buildAppException(e, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler
+    public ResponseEntity<AppException> catchResourceException(NoResourceFoundException e) {
         return buildAppException(e, HttpStatus.NOT_FOUND);
     }
 

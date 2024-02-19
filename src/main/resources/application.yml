@@ -46,6 +46,12 @@ logging:
 server:
     port: 8080
 
+resources:
+    path: "/image/**"
+#    relative to root project directory
+    resourceLocation: "/uploads/"
+    uploadPath: "./uploads/"
+
 feedback:
     sender: "ap1kdungeonmaster2@gmail.com"
     subject: "Заявка формы обратной связи"

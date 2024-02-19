@@ -6,8 +6,14 @@ import org.springframework.http.HttpStatus;
 
 
 @Data
-@AllArgsConstructor
 public class AppException {
+    private int code;
     private HttpStatus status;
     private String message;
+
+    public AppException(HttpStatus status, String message) {
+        this.message = message;
+        this.status = status;
+        code = status.value();
+    }
 }
