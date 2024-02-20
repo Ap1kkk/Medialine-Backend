@@ -1,7 +1,7 @@
 package ru.medialine.service;
 
 import ru.medialine.model.User;
-import ru.medialine.model.UserSecurity;
+import ru.medialine.security.UserSecurity;
 import ru.medialine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

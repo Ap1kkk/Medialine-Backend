@@ -16,15 +16,35 @@ CREATE TABLE medialine_users (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE medialine_categories (
+    id              BIGSERIAL,
+    name            VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE medialine_subcategories (
+    id              BIGSERIAL,
+    category_id     BIGINT NOT NULL,
+    name            VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (category_id) REFERENCES medialine_categories(id),
+    INDEX idx_category_id (category_id)
+);
+
 CREATE TABLE medialine_products (
-     id              BIGSERIAL,
-     title           VARCHAR(255) NOT NULL,
-     category        VARCHAR(255) NOT NULL,
-     description     TEXT NOT NULL,
-     specials        TEXT[],
-     packaging       TEXT[],
-     image_path      VARCHAR(255),
-     PRIMARY KEY (id)
+    id              BIGSERIAL,
+    title           VARCHAR(255) NOT NULL,
+    category_id     BIGINT NOT NULL,
+    subcategory_id  BIGINT,
+    description     TEXT NOT NULL,
+    specials        TEXT[],
+    packaging       TEXT[],
+    image_path      VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (category_id) REFERENCES medialine_categories(id),
+    FOREIGN KEY (subcategory_id) REFERENCES medialine_subcategories(id),
+    INDEX idx_category_id (category_id),
+    INDEX idx_subcategory_id (subcategory_id)
 );
 
 INSERT INTO medialine_users(email, password, role, status)

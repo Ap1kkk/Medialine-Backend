@@ -22,8 +22,13 @@ public class Product {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "subcategory_id", referencedColumnName = "id")
+    private Subcategory subcategory;
 
     @Column(nullable = false)
     private String description;

@@ -1,5 +1,6 @@
-package ru.medialine.model;
+package ru.medialine.security;
 
+import ru.medialine.model.User;
 import ru.medialine.model.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
