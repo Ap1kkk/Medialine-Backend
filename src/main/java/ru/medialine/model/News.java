@@ -22,7 +22,8 @@ public class News {
     private String title;
 
     @Column(nullable = false)
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "${format.dateFormat}")
     private Date time;
 
     @Column(nullable = false)

@@ -43,11 +43,13 @@ public class CommonConfig {
                 .dateFormat(new SimpleDateFormat(dateFormat, Locale.US))
                 .build();
     }
-//    @Bean
-//    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-//        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
-//                .serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormat)))
-//                .serializationInclusion(JsonInclude.Include.NON_NULL);
-//        return new MappingJackson2HttpMessageConverter(builder.build());
-//    }
+    @Bean
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
+                .serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormat)))
+                .deserializers(new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormat)))
+                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .serializationInclusion(JsonInclude.Include.NON_NULL);
+        return new MappingJackson2HttpMessageConverter(builder.build());
+    }
 }

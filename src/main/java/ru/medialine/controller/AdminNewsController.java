@@ -23,7 +23,7 @@ public class AdminNewsController {
         return newsService.addNews(news, file);
     }
 
-    @PatchMapping()
+    @PatchMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public News updateNews(@RequestPart News news, @RequestPart(fileParamName) MultipartFile file) {
         log.debug("Update news: {}", news.toString());
         return newsService.updateNews(news, file);

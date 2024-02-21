@@ -5,6 +5,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.medialine.converter.ProductConverter;
+import ru.medialine.dto.ProductDto;
 import ru.medialine.exception.DatabaseException;
 import ru.medialine.model.Product;
 import ru.medialine.repository.ProductRepository;
@@ -17,6 +19,8 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final FileService fileService;
+    private final IMedialineConversionService conversionService;
+    private final ProductConverter productConverter;
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -26,6 +30,11 @@ public class ProductService {
     public Product getById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new DatabaseException("Unable to find product by id " + id));
+    }
+    @SneakyThrows
+    public Product addProduct(ProductDto product, MultipartFile file) {
+
+        return productConverter.convert(product);
     }
 
     @SneakyThrows
