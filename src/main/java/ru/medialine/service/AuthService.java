@@ -41,7 +41,7 @@ public class AuthService {
             response.put("role", user.getRole());
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
-            log.error("Invalid email/password combination", e);
+            log.error(e.getMessage());
             return new ResponseEntity<>("Invalid email/password combination", HttpStatus.FORBIDDEN);
         }
     }

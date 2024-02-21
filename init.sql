@@ -27,9 +27,10 @@ CREATE TABLE medialine_subcategories (
     category_id     BIGINT NOT NULL,
     name            VARCHAR(255) NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (category_id) REFERENCES medialine_categories(id),
-    INDEX idx_category_id (category_id)
+    FOREIGN KEY (category_id) REFERENCES medialine_categories(id)
 );
+
+CREATE INDEX idx_category_id ON medialine_subcategories(category_id);
 
 CREATE TABLE medialine_products (
     id              BIGSERIAL,
@@ -42,10 +43,11 @@ CREATE TABLE medialine_products (
     image_path      VARCHAR(255),
     PRIMARY KEY (id),
     FOREIGN KEY (category_id) REFERENCES medialine_categories(id),
-    FOREIGN KEY (subcategory_id) REFERENCES medialine_subcategories(id),
-    INDEX idx_category_id (category_id),
-    INDEX idx_subcategory_id (subcategory_id)
+    FOREIGN KEY (subcategory_id) REFERENCES medialine_subcategories(id)
 );
+
+CREATE INDEX idx_product_category_id ON medialine_products(category_id);
+CREATE INDEX idx_product_subcategory_id ON medialine_products(subcategory_id);
 
 INSERT INTO medialine_users(email, password, role, status)
         VALUES ('admin@mail.ru', '$2a$12$gChF6b54pJMIwy6iFcI21OXrxToEgifHuO5OMkT785YJ3SqUYQT22', 'ADMIN', 'ACTIVE');

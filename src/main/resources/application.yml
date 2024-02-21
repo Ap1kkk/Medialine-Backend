@@ -1,4 +1,8 @@
 spring:
+    jackson:
+        date-format: yyyy-MM-dd
+#        serialization:
+#            write-dates-as-timestamps: false
     datasource:
         driver-class-name: org.postgresql.Driver
         url: jdbc:postgresql://${spring.datasource.database.host}:${spring.datasource.database.port}/${spring.datasource.database.name}
@@ -12,11 +16,9 @@ spring:
         show-sql: false
         hibernate:
             ddl-auto: update
-    whiteip: '*'
-    port: 8080
+
+format:
     dateFormat: "yyyy-MM-dd"
-
-
 
 security:
     whitelist:

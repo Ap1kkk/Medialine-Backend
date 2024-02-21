@@ -24,11 +24,11 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
+    private Category categoryId;
 
     @ManyToOne
     @JoinColumn(name = "subcategory_id", referencedColumnName = "id")
-    private Subcategory subcategory;
+    private Subcategory subcategoryId;
 
     @Column(nullable = false)
     private String description;

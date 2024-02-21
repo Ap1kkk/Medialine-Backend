@@ -2,6 +2,7 @@ package ru.medialine.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.medialine.model.News;
@@ -15,13 +16,15 @@ public class AdminNewsController {
 
     private final NewsService newsService;
     private static final String fileParamName = "image";
-    @PostMapping()
-    public News addNews(@ModelAttribute News news, @RequestPart(fileParamName) MultipartFile file) {
+
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public News addNews(@RequestPart News news, @RequestPart(fileParamName) MultipartFile file) {
         log.debug("Add news: {}", news.toString());
         return newsService.addNews(news, file);
     }
+
     @PatchMapping()
-    public News updateNews(@ModelAttribute News news, @RequestPart(fileParamName) MultipartFile file) {
+    public News updateNews(@RequestPart News news, @RequestPart(fileParamName) MultipartFile file) {
         log.debug("Update news: {}", news.toString());
         return newsService.updateNews(news, file);
     }

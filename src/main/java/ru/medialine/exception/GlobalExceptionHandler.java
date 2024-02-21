@@ -16,7 +16,7 @@ import java.nio.file.NoSuchFileException;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<AppException> catchException(Exception e) {
-        return buildAppException(e, HttpStatus.FORBIDDEN);
+        return buildAppException(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataAccessException.class)

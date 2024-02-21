@@ -1,9 +1,10 @@
 package ru.medialine.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -21,6 +22,7 @@ public class News {
     private String title;
 
     @Column(nullable = false)
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date time;
 
     @Column(nullable = false)

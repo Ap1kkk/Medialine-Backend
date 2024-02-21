@@ -20,12 +20,12 @@ public class AdminProductController {
     private static final String fileParamName = "image";
 
     @PostMapping()
-    public Product addProduct(@ModelAttribute Product product, @RequestPart(fileParamName) MultipartFile file) {
+    public Product addProduct(@RequestPart Product product, @RequestPart(fileParamName) MultipartFile file) {
         log.debug("Add product: {}", product.toString());
         return productService.addProduct(product, file);
     }
     @PatchMapping()
-    public Product updateProduct(@ModelAttribute Product product, @RequestPart(fileParamName) MultipartFile file) {
+    public Product updateProduct(@RequestPart Product product, @RequestPart(fileParamName) MultipartFile file) {
         log.debug("Update product: {}", product.toString());
         return productService.updateProduct(product, file);
     }
