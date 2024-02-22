@@ -1,4 +1,4 @@
-package ru.medialine.controller;
+package ru.medialine.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +22,15 @@ public class AdminProductController {
     private static final String fileParamName = "image";
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public Product addProduct(@RequestPart ProductDto product, @RequestPart(fileParamName) MultipartFile file) {
-        log.debug("Add product: {}", product.toString());
-        return productService.addProduct(product, file);
+    public Product addProduct(ProductDto productDto) {
+        log.debug("Add product: {}", productDto.toString());
+        return productService.addProduct(productDto);
     }
+
     @PatchMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public Product updateProduct(@RequestPart Product product, @RequestPart(fileParamName) MultipartFile file) {
-        log.debug("Update product: {}", product.toString());
-        return productService.updateProduct(product, file);
+    public Product updateProduct(ProductDto productDto) {
+        log.debug("Update product: {}", productDto.toString());
+        return productService.updateProduct(productDto);
     }
 
     @DeleteMapping()

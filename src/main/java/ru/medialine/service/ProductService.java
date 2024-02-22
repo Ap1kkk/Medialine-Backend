@@ -3,11 +3,13 @@ package ru.medialine.service;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.medialine.converter.ProductConverter;
 import ru.medialine.dto.ProductDto;
 import ru.medialine.exception.DatabaseException;
+import ru.medialine.model.Category;
 import ru.medialine.model.Product;
 import ru.medialine.repository.ProductRepository;
 
@@ -19,45 +21,51 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final FileService fileService;
-    private final IMedialineConversionService conversionService;
     private final ProductConverter productConverter;
+    private final CategoryService categoryService;
+    private final SubcategoryService subcategoryService;
+
+    @Value("${category.defaultId}")
+    private Long defaultCategoryId;
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
     @SneakyThrows
-    public Product getById(Long id) {
+    public Product tryGetById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new DatabaseException("Unable to find product by id " + id));
     }
     @SneakyThrows
-    public Product addProduct(ProductDto product, MultipartFile file) {
-
-        return productConverter.convert(product);
-    }
-
-    @SneakyThrows
-    public Product addProduct(Product product, MultipartFile file) {
-        if(product.getId() != null) {
-            if(productRepository.findById(product.getId()).isPresent())
-                throw new DatabaseException("Product with id " + product.getId() + " already exists");
+    public Product addProduct(ProductDto productDto) {
+        if(productDto.getId() != null) {
+            if(productRepository.findById(productDto.getId()).isPresent())
+                throw new DatabaseException("Product with id " + productDto.getId() + " already exists");
         }
 
-        if(file != null) {
-            String imagePath = fileService.upload(file);
+        checkForDefaultCategory(productDto);
+
+        Product product = productConverter.convert(productDto);
+
+        if(productDto.getImage() != null) {
+            String imagePath = fileService.upload(productDto.getImage());
             product.setImagePath(imagePath);
         }
 
         return productRepository.save(product);
     }
     @SneakyThrows
-    public Product updateProduct(Product product, MultipartFile file) {
-        getById(product.getId());
+    public Product updateProduct(ProductDto productDto) {
+        tryGetById(productDto.getId());
 
-        if(file != null) {
+        checkForDefaultCategory(productDto);
+
+        Product product = productConverter.convert(productDto);
+
+        if(productDto.getImage() != null) {
             String oldPath = product.getImagePath();
-            String imagePath = fileService.upload(file, oldPath);
+            String imagePath = fileService.upload(productDto.getImage(), oldPath);
             product.setImagePath(imagePath);
         }
 
@@ -66,8 +74,15 @@ public class ProductService {
 
     @SneakyThrows
     public void deleteProduct(Long id) {
-        getById(id);
+        tryGetById(id);
         productRepository.deleteById(id);
     }
 
+    @SneakyThrows
+    public void checkForDefaultCategory(ProductDto productDto) {
+        if(productDto.getCategoryId() != null) {
+            if(productDto.getCategoryId().equals(defaultCategoryId) && productDto.getSubcategoryId() != null)
+                throw new Exception("Product with default category must not have subcategory");
+        }
+    }
 }

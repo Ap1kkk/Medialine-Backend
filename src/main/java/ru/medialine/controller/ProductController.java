@@ -30,6 +30,6 @@ public class ProductController {
     @GetMapping("/{id}")
     public Product getNewsById(@PathVariable Long id) {
         log.debug("Get product by id: {}", id);
-        return productService.getById(id);
+        return productService.tryGetById(id);
     }
 }

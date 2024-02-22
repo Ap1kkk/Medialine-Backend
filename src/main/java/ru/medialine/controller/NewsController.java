@@ -28,6 +28,6 @@ public class NewsController {
     @GetMapping("/{id}")
     public News getNewsById(@PathVariable Long id) {
         log.debug("Get news by id: {}", id);
-        return newsService.getById(id);
+        return newsService.tryGetById(id);
     }
 }

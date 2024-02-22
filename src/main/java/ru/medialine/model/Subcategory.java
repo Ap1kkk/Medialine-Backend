@@ -19,5 +19,5 @@ public class Subcategory {
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category categoryId;
+    private Category category;
 }

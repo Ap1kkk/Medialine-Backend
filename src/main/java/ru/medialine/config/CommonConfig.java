@@ -36,8 +36,8 @@ public class CommonConfig {
                 .modules(new ParameterNamesModule(), new Jdk8Module(), new JavaTimeModule())
                 .featuresToEnable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
                 .featuresToDisable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                .serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormat)))
-                .deserializers(new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormat)))
+//                .serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormat)))
+//                .deserializers(new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormat)))
                 .serializationInclusion(JsonInclude.Include.NON_NULL)
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .dateFormat(new SimpleDateFormat(dateFormat, Locale.US))
@@ -46,8 +46,8 @@ public class CommonConfig {
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
-                .serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormat)))
-                .deserializers(new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormat)))
+//                .serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormat)))
+//                .deserializers(new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormat)))
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .serializationInclusion(JsonInclude.Include.NON_NULL);
         return new MappingJackson2HttpMessageConverter(builder.build());

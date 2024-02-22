@@ -1,4 +1,4 @@
-package ru.medialine.controller;
+package ru.medialine.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

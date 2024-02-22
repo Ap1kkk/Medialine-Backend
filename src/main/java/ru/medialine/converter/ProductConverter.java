@@ -6,13 +6,15 @@ import ru.medialine.dto.ProductDto;
 import ru.medialine.model.Product;
 import ru.medialine.repository.CategoryRepository;
 import ru.medialine.repository.SubcategoryRepository;
+import ru.medialine.service.CategoryService;
+import ru.medialine.service.SubcategoryService;
 
 @Component
 @RequiredArgsConstructor
 public class ProductConverter implements IProductConverter{
 
-    private final CategoryRepository categoryRepository;
-    private final SubcategoryRepository subcategoryRepository;
+    private final CategoryService categoryService;
+    private final SubcategoryService subcategoryService;
 
     @Override
     public Product convert(ProductDto source) {
@@ -25,9 +27,10 @@ public class ProductConverter implements IProductConverter{
         target.setSpecials(source.getSpecials());
         target.setPackaging(source.getPackaging());
 
-        target.setCategory(categoryRepository.getById(source.getCategoryId()));
+        target.setCategory(categoryService.tryGetById(source.getCategoryId()));
+
         if(source.getSubcategoryId() != null) {
-            target.setSubcategory(subcategoryRepository.getById(source.getSubcategoryId()));
+            target.setSubcategory(subcategoryService.tryGetById(source.getSubcategoryId()));
         }
         return target;
     }

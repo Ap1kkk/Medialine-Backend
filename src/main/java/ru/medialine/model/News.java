@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -22,9 +24,7 @@ public class News {
     private String title;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "${format.dateFormat}")
-    private Date time;
+    private LocalDate time;
 
     @Column(nullable = false)
     private String text;
