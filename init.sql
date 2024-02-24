@@ -9,12 +9,14 @@ CREATE TABLE medialine_news (
 
 CREATE TABLE medialine_users (
     id              BIGSERIAL,
-    email           VARCHAR(255) NOT NULL,
+    email           VARCHAR(255) NOT NULL UNIQUE,
     password        VARCHAR(255) NOT NULL,
     role            VARCHAR(255) NOT NULL,
     status          VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
+
+CREATE INDEX idx_user_email ON medialine_users(email);
 
 CREATE TABLE medialine_categories (
     id              BIGSERIAL,
@@ -50,7 +52,7 @@ CREATE INDEX idx_product_category_id ON medialine_products(category_id);
 CREATE INDEX idx_product_subcategory_id ON medialine_products(subcategory_id);
 
 INSERT INTO medialine_users(email, password, role, status)
-        VALUES ('admin@mail.ru', '$2a$12$gChF6b54pJMIwy6iFcI21OXrxToEgifHuO5OMkT785YJ3SqUYQT22', 'ADMIN', 'ACTIVE');
+        VALUES ('admin@mail.ru', '$2a$12$gChF6b54pJMIwy6iFcI21OXrxToEgifHuO5OMkT785YJ3SqUYQT22', 'SUPER_ADMIN', 'ACTIVE');
 
 INSERT INTO medialine_categories(name)
         VALUES ('Без категории')

@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.medialine.converter.SubcategoryConverter;
 import ru.medialine.dto.SubcategoryDto;
-import ru.medialine.exception.DatabaseException;
+import ru.medialine.exception.database.AlreadyExistException;
+import ru.medialine.exception.database.DatabaseException;
+import ru.medialine.exception.database.EntityNotFoundException;
 import ru.medialine.model.Product;
 import ru.medialine.model.Subcategory;
-import ru.medialine.repository.CategoryRepository;
 import ru.medialine.repository.ProductRepository;
 import ru.medialine.repository.SubcategoryRepository;
 
@@ -22,29 +23,26 @@ public class SubcategoryService {
     private final SubcategoryConverter subcategoryConverter;
     private final ProductRepository productRepository;
 
-    public Subcategory tryGetById(Long id) {
+    public Subcategory tryGetById(Long id) throws EntityNotFoundException {
         return subcategoryRepository.findById(id)
-                .orElseThrow(() -> new DatabaseException("Unable to find subcategory by id " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find subcategory by id " + id));
     }
 
-    @SneakyThrows
-    public Subcategory addSubcategory(SubcategoryDto subcategoryDto) {
+    public Subcategory addSubcategory(SubcategoryDto subcategoryDto) throws AlreadyExistException {
         if(subcategoryDto.getId() != null) {
             if(subcategoryRepository.findById(subcategoryDto.getId()).isPresent())
-                throw new DatabaseException("Subcategory with id " + subcategoryDto.getId() + " already exists");
+                throw new AlreadyExistException("Subcategory with id " + subcategoryDto.getId() + " already exists");
         }
 
         return subcategoryRepository.save(subcategoryConverter.convert(subcategoryDto));
     }
 
-    @SneakyThrows
-    public Subcategory updateSubcategory(SubcategoryDto subcategoryDto) {
+    public Subcategory updateSubcategory(SubcategoryDto subcategoryDto) throws EntityNotFoundException {
         tryGetById(subcategoryDto.getId());
 
         return subcategoryRepository.save(subcategoryConverter.convert(subcategoryDto));
     }
 
-    @SneakyThrows
     @Transactional
     public void deleteRelatedSubcategories(Long categoryId) {
         List<Subcategory> subcategories = subcategoryRepository.findAllByCategoryId(categoryId);
@@ -56,17 +54,12 @@ public class SubcategoryService {
         subcategoryRepository.deleteAll(subcategories);
     }
 
-    @SneakyThrows
+
     @Transactional
-    public void deleteSubcategory(Long id) {
+    public void deleteSubcategory(Long id) throws EntityNotFoundException {
         tryGetById(id);
 
         subcategoryRepository.updateProductSubcategoryToNull(id);
         subcategoryRepository.deleteById(id);
-    }
-
-    public Product setDefaultSubcategory(Product product) {
-        product.setSubcategory(null);
-        return product;
     }
 }

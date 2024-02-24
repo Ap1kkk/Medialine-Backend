@@ -3,7 +3,9 @@ package ru.medialine.service;
 import lombok.SneakyThrows;
 import ru.medialine.converter.NewsConverter;
 import ru.medialine.dto.NewsDto;
-import ru.medialine.exception.DatabaseException;
+import ru.medialine.exception.database.AlreadyExistException;
+import ru.medialine.exception.database.DatabaseException;
+import ru.medialine.exception.database.EntityNotFoundException;
 import ru.medialine.model.News;
 import ru.medialine.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,17 +26,15 @@ public class NewsService {
         return newsRepository.findAll();
     }
 
-    @SneakyThrows
-    public News tryGetById(Long id) {
+    public News tryGetById(Long id) throws EntityNotFoundException {
         return newsRepository.findById(id)
-                .orElseThrow(() -> new DatabaseException("Unable to find news by id " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find news by id " + id));
     }
 
-    @SneakyThrows
-    public News addNews(NewsDto newsDto) {
+    public News addNews(NewsDto newsDto) throws AlreadyExistException {
         if(newsDto.getId() != null) {
             if(newsRepository.findById(newsDto.getId()).isPresent())
-                throw new DatabaseException("News with id " + newsDto.getId() + " already exists");
+                throw new AlreadyExistException("News with id " + newsDto.getId() + " already exists");
         }
 
         News news = newsConverter.convert(newsDto);
@@ -47,8 +47,7 @@ public class NewsService {
         return newsRepository.save(news);
     }
 
-    @SneakyThrows
-    public News updateNews(NewsDto newsDto) {
+    public News updateNews(NewsDto newsDto) throws EntityNotFoundException  {
         tryGetById(newsDto.getId());
 
         News news = newsConverter.convert(newsDto);
@@ -62,8 +61,7 @@ public class NewsService {
         return newsRepository.save(news);
     }
 
-    @SneakyThrows
-    public void deleteNews(Long id) {
+    public void deleteNews(Long id) throws EntityNotFoundException {
         tryGetById(id);
         newsRepository.deleteById(id);
     }

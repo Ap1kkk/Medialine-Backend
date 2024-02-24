@@ -9,7 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.medialine.dto.LoginDto;
+import ru.medialine.dto.CredentialsDto;
 import ru.medialine.model.User;
 import ru.medialine.repository.UserRepository;
 import ru.medialine.security.JwtAuthenticationProvider;
@@ -26,23 +26,18 @@ public class AuthService {
     private final JwtAuthenticationProvider jwtProvider;
     private final UserRepository userRepository;
 
-    public ResponseEntity<?> authenticate(LoginDto userDto) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword()));
-            User user = userRepository.findByEmailWithStatusActive(userDto.getEmail());
-            if (user == null) {
-                throw new UsernameNotFoundException("User doesn't exists");
-            }
-            String token = jwtProvider.createToken(userDto.getEmail(), user.getRole().name());
-            Map<Object, Object> response = new HashMap<>();
-            response.put("email", userDto.getEmail());
-            response.put("token", token);
-            response.put("role", user.getRole());
-            return ResponseEntity.ok(response);
-        } catch (AuthenticationException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>("Invalid email/password combination", HttpStatus.FORBIDDEN);
+    public ResponseEntity<?> authenticate(CredentialsDto userDto) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword()));
+        User user = userRepository.findByEmailWithStatusActive(userDto.getEmail());
+        if (user == null) {
+            throw new UsernameNotFoundException("User doesn't exists");
         }
+        String token = jwtProvider.createToken(userDto.getEmail(), user.getRole().name());
+        Map<Object, Object> response = new HashMap<>();
+        response.put("email", userDto.getEmail());
+        response.put("token", token);
+        response.put("role", user.getRole());
+        return ResponseEntity.ok(response);
     }
 }

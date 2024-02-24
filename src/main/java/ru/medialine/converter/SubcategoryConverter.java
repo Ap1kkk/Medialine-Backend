@@ -3,7 +3,7 @@ package ru.medialine.converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.medialine.dto.SubcategoryDto;
-import ru.medialine.exception.DatabaseException;
+import ru.medialine.exception.database.DatabaseException;
 import ru.medialine.model.Subcategory;
 import ru.medialine.repository.CategoryRepository;
 

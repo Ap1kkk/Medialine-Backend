@@ -1,4 +1,4 @@
-package ru.medialine.exception;
+package ru.medialine.exception.database;
 
 import lombok.Getter;
 

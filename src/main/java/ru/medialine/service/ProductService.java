@@ -5,11 +5,11 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import ru.medialine.converter.ProductConverter;
 import ru.medialine.dto.ProductDto;
-import ru.medialine.exception.DatabaseException;
-import ru.medialine.model.Category;
+import ru.medialine.exception.database.AlreadyExistException;
+import ru.medialine.exception.database.DatabaseException;
+import ru.medialine.exception.database.EntityNotFoundException;
 import ru.medialine.model.Product;
 import ru.medialine.repository.ProductRepository;
 
@@ -32,16 +32,15 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    @SneakyThrows
-    public Product tryGetById(Long id) {
+    public Product tryGetById(Long id) throws EntityNotFoundException {
         return productRepository.findById(id)
-                .orElseThrow(() -> new DatabaseException("Unable to find product by id " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find product by id " + id));
     }
-    @SneakyThrows
-    public Product addProduct(ProductDto productDto) {
+
+    public Product addProduct(ProductDto productDto) throws AlreadyExistException {
         if(productDto.getId() != null) {
             if(productRepository.findById(productDto.getId()).isPresent())
-                throw new DatabaseException("Product with id " + productDto.getId() + " already exists");
+                throw new AlreadyExistException("Product with id " + productDto.getId() + " already exists");
         }
 
         checkForDefaultCategory(productDto);
@@ -55,8 +54,8 @@ public class ProductService {
 
         return productRepository.save(product);
     }
-    @SneakyThrows
-    public Product updateProduct(ProductDto productDto) {
+
+    public Product updateProduct(ProductDto productDto) throws EntityNotFoundException {
         tryGetById(productDto.getId());
 
         checkForDefaultCategory(productDto);
@@ -72,8 +71,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    @SneakyThrows
-    public void deleteProduct(Long id) {
+    public void deleteProduct(Long id) throws EntityNotFoundException {
         tryGetById(id);
         productRepository.deleteById(id);
     }

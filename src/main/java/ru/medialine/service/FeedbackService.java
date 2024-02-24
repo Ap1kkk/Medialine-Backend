@@ -34,8 +34,19 @@ public class FeedbackService {
                 configProperties.getEmailTemplateLocation(),
                 Map.of(
                     "clientName", feedbackDto.getClientName(),
-                    "clientPhone", feedbackDto.getPhone()
+                    "clientPhone", feedbackDto.getPhone(),
+                    "formattedClientPhone", formatPhone(feedbackDto.getPhone())
                 )
         );
+    }
+
+    private String formatPhone(String phone) {
+        String cleaned = phone.replaceAll("[^0-9]", "");
+
+        if (cleaned.length() == 11 && cleaned.startsWith("7")) {
+            return "+7 (" + cleaned.substring(1, 4) + ") " + cleaned.substring(4, 7) + "-" + cleaned.substring(7, 9) + "-" + cleaned.substring(9);
+        }
+
+        return phone;
     }
 }

@@ -12,6 +12,12 @@ spring:
         show-sql: false
         hibernate:
             ddl-auto: update
+    servlet:
+        multipart:
+            enabled: true
+            file-size-threshold: 2KB
+            max-file-size: 5MB
+            max-request-size: 5MB
 
 category:
     defaultId: 1

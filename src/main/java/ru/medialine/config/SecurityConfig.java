@@ -1,7 +1,6 @@
 package ru.medialine.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +22,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ru.medialine.config.properties.CorsConfigProperties;
 import ru.medialine.config.properties.SecurityConfigProperties;
-import ru.medialine.exception.RestResponseStatusExceptionResolver;
+import ru.medialine.exception.resolver.RestResponseStatusExceptionResolver;
+import ru.medialine.model.enums.Permission;
 import ru.medialine.security.JwtAuthenticationFilter;
 import ru.medialine.service.UserService;
 
@@ -57,6 +57,7 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(securityProperties.getAuthOnly())
                     .authenticated()
+                    .requestMatchers("/api/superadmin").hasAuthority(Permission.SUPER_ADMIN_PERMISSION.toString())
                     .anyRequest()
                     .permitAll())
             .authenticationProvider(authenticationProvider())

@@ -1,4 +1,4 @@
-package ru.medialine.exception;
+package ru.medialine.exception.resolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +10,8 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+import ru.medialine.exception.AppException;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -23,14 +25,11 @@ public class RestResponseStatusExceptionResolver implements HandlerExceptionReso
             HttpServletResponse response,
             Object object,
             Exception exception) {
-        log.error(exception.getMessage());
-
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        response.setContentType("application/json");
 
         try (PrintWriter writer = response.getWriter()) {
             ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(new AppException(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+            log.error(exception.getMessage());
+            String json = objectMapper.writeValueAsString(new AppException(HttpStatus.FORBIDDEN, exception.getMessage()));
             writer.write(json);
         } catch (IOException ioException) {
             log.error("Error writing JSON response", ioException);

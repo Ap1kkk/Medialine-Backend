@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.medialine.converter.CategoryConverter;
 import ru.medialine.dto.CategoryDto;
-import ru.medialine.exception.DatabaseException;
+import ru.medialine.exception.database.AlreadyExistException;
+import ru.medialine.exception.database.DatabaseException;
+import ru.medialine.exception.database.EntityNotFoundException;
 import ru.medialine.model.Category;
 import ru.medialine.model.Product;
 import ru.medialine.repository.CategoryRepository;
-import ru.medialine.repository.ProductRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,25 +26,24 @@ public class CategoryService {
     @Value("${category.defaultId}")
     private Long defaultCategoryId;
 
-    @SneakyThrows
-    public Category tryGetById(Long id) {
+    public Category tryGetById(Long id) throws EntityNotFoundException {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new DatabaseException("Unable to find category by id " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Unable to find category by id " + id));
     }
 
     public List<CategoryDto> getAll() {
         return categoryConverter.convert(categoryRepository.findAll());
     }
 
-    public Category addCategory(Category category) {
+    public Category addCategory(Category category) throws AlreadyExistException {
         if(category.getId() != null) {
             if(categoryRepository.findById(category.getId()).isPresent())
-                throw new DatabaseException("Category with id " + category.getId() + " already exists");
+                throw new AlreadyExistException("Category with id " + category.getId() + " already exists");
         }
         return categoryRepository.save(category);
     }
 
-    public Category updateCategory(Category category) {
+    public Category updateCategory(Category category) throws EntityNotFoundException {
         tryGetById(category.getId());
 
         return categoryRepository.save(category);
@@ -60,14 +59,5 @@ public class CategoryService {
         categoryRepository.updateProductsCategory(id);
         subcategoryService.deleteRelatedSubcategories(id);
         categoryRepository.deleteById(id);
-    }
-
-    public Product setDefaultCategory(Product product) {
-        product.setCategory(getDefaultCategory());
-        return product;
-    }
-
-    public Category getDefaultCategory() {
-        return tryGetById(defaultCategoryId);
     }
 }
