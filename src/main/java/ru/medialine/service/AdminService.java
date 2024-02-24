@@ -1,7 +1,6 @@
 package ru.medialine.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,9 +55,9 @@ public class AdminService {
     }
 
     public User updateAdmin(UpdateCredentialsDto credentials) throws EntityNotFoundException {
-        User user = tryGetByEmail(credentials.getOldEmail());
+        User user = tryGetById(credentials.getId());
 
-        user.setEmail(credentials.getNewEmail());
+        user.setEmail(credentials.getEmail());
         user.setPassword(credentials.getPassword());
 
         return userRepository.save(user);

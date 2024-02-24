@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateCredentialsDto {
-    private String oldEmail;
-    private String newEmail;
+    private Long id;
+    private String email;
     private String password;
 }
