@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.medialine.dto.CredentialsDto;
+import ru.medialine.dto.UpdateCredentialsDto;
 import ru.medialine.exception.database.AlreadyExistException;
 import ru.medialine.exception.database.DatabaseException;
 import ru.medialine.exception.database.EntityNotFoundException;
@@ -54,14 +55,17 @@ public class AdminService {
         return userRepository.save(admin);
     }
 
-    public User updateAdmin(User user) throws EntityNotFoundException {
-        tryGetById(user.getId());
+    public User updateAdmin(UpdateCredentialsDto credentials) throws EntityNotFoundException {
+        User user = tryGetByEmail(credentials.getOldEmail());
+
+        user.setEmail(credentials.getNewEmail());
+        user.setPassword(credentials.getPassword());
 
         return userRepository.save(user);
     }
 
-    public void deleteAdmin(CredentialsDto credentials) throws EntityNotFoundException {
-        User user = tryGetByEmail(credentials.getEmail());
+    public void deleteAdmin(String email) throws EntityNotFoundException {
+        User user = tryGetByEmail(email);
         if(user.getRole() == Role.SUPER_ADMIN) {
             throw new DatabaseException("Unable to delete super admin");
         }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.medialine.dto.CredentialsDto;
+import ru.medialine.dto.UpdateCredentialsDto;
 import ru.medialine.model.User;
 import ru.medialine.service.AdminService;
 
@@ -27,12 +28,12 @@ public class SuperAdminController {
     }
 
     @PatchMapping()
-    public User updateAdmin(@ModelAttribute User user) {
-        return adminService.updateAdmin(user);
+    public User updateAdmin(@ModelAttribute UpdateCredentialsDto credentialsDto) {
+        return adminService.updateAdmin(credentialsDto);
     }
 
     @DeleteMapping()
-    public void deleteAdmin(@ModelAttribute CredentialsDto credentialsDto) {
-        adminService.deleteAdmin(credentialsDto);
+    public void deleteAdmin(@ModelAttribute String email) {
+        adminService.deleteAdmin(email);
     }
 }
