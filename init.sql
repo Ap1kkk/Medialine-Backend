@@ -55,4 +55,4 @@ INSERT INTO medialine_users(email, password, role, status)
         VALUES ('admin@mail.ru', '$2a$12$gChF6b54pJMIwy6iFcI21OXrxToEgifHuO5OMkT785YJ3SqUYQT22', 'SUPER_ADMIN', 'ACTIVE');
 
 INSERT INTO medialine_categories(name)
-        VALUES ('Без категории')
+        VALUES ('Все категории')
