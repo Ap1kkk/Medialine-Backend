@@ -16,23 +16,19 @@ import ru.medialine.service.NewsService;
 public class AdminNewsController {
 
     private final NewsService newsService;
-    private static final String fileParamName = "image";
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public News addNews(NewsDto news) {
-        log.debug("Add news: {}", news.toString());
         return newsService.addNews(news);
     }
 
     @PatchMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public News updateNews(NewsDto news) {
-        log.debug("Update news: {}", news.toString());
         return newsService.updateNews(news);
     }
 
     @DeleteMapping()
     public void deleteNews(@RequestParam Long id) {
-        log.debug("Delete news with id: {}", id);
         newsService.deleteNews(id);
     }
 

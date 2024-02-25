@@ -21,15 +21,13 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/all")
+    @GetMapping()
     public List<Product> getAllProducts() {
-        log.debug("Get all products");
         return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
     public Product getNewsById(@PathVariable Long id) {
-        log.debug("Get product by id: {}", id);
         return productService.tryGetById(id);
     }
 }

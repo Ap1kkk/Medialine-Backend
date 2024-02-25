@@ -19,11 +19,8 @@ public class AdminProductController {
     private final ProductService productService;
     private final FileService fileService;
 
-    private static final String fileParamName = "image";
-
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public Product addProduct(ProductDto productDto) {
-        log.debug("Add product: {}", productDto.toString());
         return productService.addProduct(productDto);
     }
 

@@ -15,21 +15,18 @@ public class AdminCategoryController {
     private final CategoryService categoryService;
 
     @PostMapping()
-    public Category addCategory(@RequestBody Category category) {
-        log.debug("Add category: {}", category);
+    public Category addCategory(@ModelAttribute Category category) {
         return categoryService.addCategory(category);
     }
 
     @PatchMapping()
-    public Category updateCategory(@RequestBody Category category) {
-        log.debug("Update category: {}", category);
+    public Category updateCategory(@ModelAttribute Category category) {
         return categoryService.updateCategory(category);
     }
 
     @DeleteMapping()
     @Transactional()
     public void deleteCategory(@RequestParam Long id) {
-        log.debug("Delete category with id: {}", id);
         categoryService.deleteCategory(id);
     }
 }

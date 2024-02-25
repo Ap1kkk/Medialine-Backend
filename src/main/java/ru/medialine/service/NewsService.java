@@ -32,6 +32,8 @@ public class NewsService {
     }
 
     public News addNews(NewsDto newsDto) throws AlreadyExistException {
+        log.debug("Try to add news: {}", newsDto);
+
         if(newsDto.getId() != null) {
             if(newsRepository.findById(newsDto.getId()).isPresent())
                 throw new AlreadyExistException("News with id " + newsDto.getId() + " already exists");
@@ -48,6 +50,8 @@ public class NewsService {
     }
 
     public News updateNews(NewsDto newsDto) throws EntityNotFoundException  {
+        log.debug("Try to update news: {}", newsDto);
+
         tryGetById(newsDto.getId());
 
         News news = newsConverter.convert(newsDto);
@@ -62,6 +66,8 @@ public class NewsService {
     }
 
     public void deleteNews(Long id) throws EntityNotFoundException {
+        log.debug("Try to delete news by id: {}", id);
+
         tryGetById(id);
         newsRepository.deleteById(id);
     }

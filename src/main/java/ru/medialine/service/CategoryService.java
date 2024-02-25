@@ -2,6 +2,7 @@ package ru.medialine.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import ru.medialine.repository.CategoryRepository;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
@@ -36,6 +38,8 @@ public class CategoryService {
     }
 
     public Category addCategory(Category category) throws AlreadyExistException {
+        log.debug("Try to add category: {}", category);
+
         if(category.getId() != null) {
             if(categoryRepository.findById(category.getId()).isPresent())
                 throw new AlreadyExistException("Category with id " + category.getId() + " already exists");
@@ -44,6 +48,8 @@ public class CategoryService {
     }
 
     public Category updateCategory(Category category) throws EntityNotFoundException {
+        log.debug("Try to update category: {}", category);
+
         tryGetById(category.getId());
 
         return categoryRepository.save(category);
@@ -51,6 +57,8 @@ public class CategoryService {
 
     @Transactional
     public void deleteCategory(Long id) {
+        log.debug("Try to delete category by id: {}", id);
+
         if(id.equals(defaultCategoryId))
             throw new DatabaseException("Cannot delete default category");
 

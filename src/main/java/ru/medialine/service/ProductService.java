@@ -38,12 +38,15 @@ public class ProductService {
     }
 
     public Product addProduct(ProductDto productDto) throws AlreadyExistException {
+        log.debug("Try to add product: {}", productDto);
+
         if(productDto.getId() != null) {
             if(productRepository.findById(productDto.getId()).isPresent())
                 throw new AlreadyExistException("Product with id " + productDto.getId() + " already exists");
         }
 
         checkForDefaultCategory(productDto);
+        checkSubcategoryRelation(productDto);
 
         Product product = productConverter.convert(productDto);
 
@@ -56,9 +59,12 @@ public class ProductService {
     }
 
     public Product updateProduct(ProductDto productDto) throws EntityNotFoundException {
+        log.debug("Try to update product: {}", productDto);
+
         tryGetById(productDto.getId());
 
         checkForDefaultCategory(productDto);
+        checkSubcategoryRelation(productDto);
 
         Product product = productConverter.convert(productDto);
 
@@ -72,15 +78,23 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) throws EntityNotFoundException {
+        log.debug("Try to delete product by id: {}", id);
+
         tryGetById(id);
         productRepository.deleteById(id);
     }
 
     @SneakyThrows
-    public void checkForDefaultCategory(ProductDto productDto) {
+    private void checkForDefaultCategory(ProductDto productDto) {
         if(productDto.getCategoryId() != null) {
             if(productDto.getCategoryId().equals(defaultCategoryId) && productDto.getSubcategoryId() != null)
                 throw new Exception("Product with default category must not have subcategory");
+        }
+    }
+
+    private void checkSubcategoryRelation(ProductDto productDto) {
+        if(productDto.getSubcategoryId() != null) {
+            subcategoryService.checkSubcategoryRelation(productDto.getSubcategoryId(), productDto.getCategoryId());
         }
     }
 }

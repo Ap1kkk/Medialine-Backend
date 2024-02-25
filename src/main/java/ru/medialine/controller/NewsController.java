@@ -21,13 +21,11 @@ public class NewsController {
 
     @GetMapping()
     public List<News> getAllNews() {
-        log.debug("Get all news");
         return newsService.getAllNews();
     }
 
     @GetMapping("/{id}")
     public News getNewsById(@PathVariable Long id) {
-        log.debug("Get news by id: {}", id);
         return newsService.tryGetById(id);
     }
 }

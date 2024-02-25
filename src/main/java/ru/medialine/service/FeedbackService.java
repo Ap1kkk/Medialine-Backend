@@ -1,6 +1,7 @@
 package ru.medialine.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class FeedbackService {
 
@@ -20,12 +22,11 @@ public class FeedbackService {
     private final DefaultEmailService emailService;
 
     public void send(FeedbackDto feedbackDto) {
+        log.debug("Try to send feedback: {}", feedbackDto);
         emailService.senEmail(buildEmailContext(feedbackDto));
     }
 
     private EmailContext buildEmailContext(FeedbackDto feedbackDto) {
-        var templateParams = configProperties.getTemplateParams();
-
         return new EmailContext(
                 configProperties.getSender(),
                 configProperties.getReceiver(),

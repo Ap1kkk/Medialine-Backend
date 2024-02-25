@@ -20,7 +20,6 @@ public class CategoryController {
 
     @GetMapping()
     public List<CategoryDto> getAllNews() {
-        log.debug("Get all categories");
         return categoryService.getAll();
     }
 }

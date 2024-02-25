@@ -33,7 +33,12 @@ public class SuperAdminController {
     }
 
     @DeleteMapping()
-    public void deleteAdmin(@ModelAttribute String email) {
+    public void deleteAdminByEmail(@RequestParam String email) {
         adminService.deleteAdmin(email);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteAdminById(@PathVariable Long id) {
+        adminService.deleteAdmin(id);
     }
 }

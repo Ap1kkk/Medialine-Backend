@@ -1,6 +1,7 @@
 package ru.medialine.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,8 +43,9 @@ public class AdminService {
     }
 
     public User addAdmin(CredentialsDto credentials) throws AlreadyExistException {
-        if(userRepository.findByEmail(credentials.getEmail()) != null)
-            throw new AlreadyExistException("Cannot create admin. Email " + credentials.getEmail() + " already in use");
+        log.debug("Trying to add admin: {}", credentials);
+
+        checkEmailInUse(credentials.getEmail());
 
         User admin = new User();
         admin.setEmail(credentials.getEmail());
@@ -54,20 +56,41 @@ public class AdminService {
         return userRepository.save(admin);
     }
 
+    @SneakyThrows
     public User updateAdmin(UpdateCredentialsDto credentials) throws EntityNotFoundException {
+        log.debug("Trying to update admin: {}", credentials);
+
         User user = tryGetById(credentials.getId());
+        checkEmailInUse(credentials.getEmail());
+
+        if(user.getRole() == Role.SUPER_ADMIN)
+            throw new Exception("Forbidden to change super admin account");
 
         user.setEmail(credentials.getEmail());
-        user.setPassword(credentials.getPassword());
+        user.setPassword(passwordEncoder.encode(credentials.getPassword()));
 
         return userRepository.save(user);
     }
 
+    public void deleteAdmin(Long id) throws EntityNotFoundException {
+        deleteAdmin(tryGetById(id));
+    }
+
     public void deleteAdmin(String email) throws EntityNotFoundException {
-        User user = tryGetByEmail(email);
+        deleteAdmin(tryGetByEmail(email));
+    }
+
+    private void deleteAdmin(User user) throws DatabaseException{
+        log.debug("Trying to delete admin: {}", user);
+
         if(user.getRole() == Role.SUPER_ADMIN) {
-            throw new DatabaseException("Unable to delete super admin");
+            throw new DatabaseException("Forbidden to delete super admin");
         }
         userRepository.delete(user);
+    }
+
+    private void checkEmailInUse(String email) throws AlreadyExistException{
+        if(userRepository.findByEmail(email) != null)
+            throw new AlreadyExistException("Email " + email + " already in use");
     }
 }

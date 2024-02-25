@@ -19,7 +19,6 @@ public class FeedbackController {
 
     @PostMapping()
     public void sendFeedback(@RequestBody FeedbackDto feedback) {
-        log.debug("Feedback needed for: {}", feedback.toString());
         emailService.send(feedback);
     }
 }

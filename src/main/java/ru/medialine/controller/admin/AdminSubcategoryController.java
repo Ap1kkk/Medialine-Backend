@@ -17,21 +17,18 @@ public class AdminSubcategoryController {
     private final SubcategoryService subcategoryService;
 
     @PostMapping()
-    public Subcategory addCategory(@RequestBody SubcategoryDto subcategoryDto) {
-        log.debug("Add subcategory: {}", subcategoryDto);
+    public Subcategory addCategory(@ModelAttribute SubcategoryDto subcategoryDto) {
         return subcategoryService.addSubcategory(subcategoryDto);
     }
 
     @PatchMapping()
-    public Subcategory updateCategory(@RequestBody SubcategoryDto subcategoryDto) {
-        log.debug("Update subcategory: {}", subcategoryDto);
+    public Subcategory updateCategory(@ModelAttribute SubcategoryDto subcategoryDto) {
         return subcategoryService.updateSubcategory(subcategoryDto);
     }
 
     @DeleteMapping()
     @Transactional()
     public void deleteCategory(@RequestParam Long id) {
-        log.debug("Delete subcategory with id: {}", id);
         subcategoryService.deleteSubcategory(id);
     }
 }
