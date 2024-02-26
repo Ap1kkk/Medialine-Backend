@@ -1,6 +1,7 @@
 package ru.medialine.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Service;
 import ru.medialine.config.properties.FeedbackConfigProperties;
 import ru.medialine.context.EmailContext;
 import ru.medialine.dto.FeedbackDto;
+import ru.medialine.dto.RecaptchaRequestDto;
+import ru.medialine.dto.RecaptchaResponse;
+import ru.medialine.exception.RecaptchaException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,10 +25,13 @@ public class FeedbackService {
     private final FeedbackConfigProperties configProperties;
     private final DefaultEmailService emailService;
 
+    @SneakyThrows
     public void send(FeedbackDto feedbackDto) {
         log.debug("Try to send feedback: {}", feedbackDto);
+
         emailService.senEmail(buildEmailContext(feedbackDto));
     }
+
 
     private EmailContext buildEmailContext(FeedbackDto feedbackDto) {
         return new EmailContext(

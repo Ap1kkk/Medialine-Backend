@@ -79,3 +79,9 @@ email:
     smtp-auth: true
     starttls-enable: true
     debug: true
+
+google:
+    recaptcha:
+        url: "https://www.google.com/recaptcha/api/siteverify"
+        secret: "6Lc6HoApAAAAAHDuhUuUQRsFcS9cNwqIy7t7GJ-G"
+        score-threshold: 0.5
