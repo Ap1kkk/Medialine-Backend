@@ -33,13 +33,11 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
-    @Type(StringArrayType.class)
     @Column(name = "specials", columnDefinition = "TEXT[]")
-    private String[] specials;
+    private String specials;
 
-    @Type(StringArrayType.class)
     @Column(name = "packaging", columnDefinition = "TEXT[]")
-    private String[] packaging;
+    private String packaging;
 
     @Column(name = "image_path",nullable = false)
     private String imagePath;

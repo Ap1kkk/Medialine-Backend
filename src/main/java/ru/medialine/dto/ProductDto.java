@@ -16,8 +16,8 @@ public class ProductDto {
     private Long categoryId;
     private Long subcategoryId;
     private String description;
-    private String[] specials;
-    private String[] packaging;
+    private String specials;
+    private String packaging;
     private String imagePath;
     private MultipartFile image;
 }
